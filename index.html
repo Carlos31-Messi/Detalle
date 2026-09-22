@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para ti, mi chama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --petal-1:#ffd23f;
+    --petal-2:#f2a900;
+    --petal-deep:#e07a00;
+    --leaf:#5a9a4a;
+    --leaf-dark:#3d6d2f;
+    --soil-1:#8a5a34;
+    --soil-2:#5c3a1f;
+    --ink:#3a2a12;
+    --ink-soft:#6b5636;
+    --card-bg:#fffaf0;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{margin:0;min-height:100%;font-family:'Karla',sans-serif;color:var(--ink);}
+  body{
+    position:relative;
+    overflow-x:hidden;
+    background:linear-gradient(180deg,#bfe4ff 0%, #d8f0ff 30%, #eef8ff 48%, #ffe9b8 68%, #ffd98a 78%);
+  }
+
+  .sky{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .cloud{
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+    opacity:0.75;
+    filter:blur(1px);
+  }
+  .cloud::before, .cloud::after{
+    content:"";
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+  }
+  .c1{width:70px;height:26px;top:8%;left:8%;}
+  .c1::before{width:40px;height:40px;top:-18px;left:8px;}
+  .c1::after{width:34px;height:30px;top:-10px;left:36px;}
+  .c2{width:90px;height:30px;top:16%;left:58%;opacity:0.6;}
+  .c2::before{width:46px;height:46px;top:-20px;left:12px;}
+  .c2::after{width:38px;height:32px;top:-10px;left:46px;}
+  .c3{width:60px;height:22px;top:5%;left:38%;opacity:0.5;}
+  .c3::before{width:32px;height:32px;top:-14px;left:8px;}
+
+  .sun{
+    position:fixed;
+    top:calc(18px + env(safe-area-inset-top,0px));
+    right:22px;
+    width:78px;
+    height:78px;
+    z-index:-1;
+    pointer-events:none;
+  }
+  .sun-core{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff6cf, var(--petal-1) 55%, var(--petal-2) 100%);
+    box-shadow:0 0 0 12px rgba(255,210,63,0.2), 0 0 46px 12px rgba(255,193,7,0.4);
+    animation:pulse 6s ease-in-out infinite;
+  }
+  .sun-rays{
+    position:absolute;
+    inset:-26px;
+    animation:spin 60s linear infinite;
+  }
+  .sun-rays span{
+    position:absolute;
+    top:50%;left:50%;
+    width:3px;height:16px;
+    background:rgba(242,169,0,0.45);
+    border-radius:2px;
+    transform-origin:50% 65px;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  .bird{
+    position:fixed;
+    z-index:-1;
+    width:34px;
+    pointer-events:none;
+    will-change:transform;
+  }
+  .bird svg{width:100%;display:block;overflow:visible;}
+  .bird .wing{transform-origin:30px 15px;animation:flap 0.7s ease-in-out infinite;}
+  .bird .wing-r{animation-delay:0s;}
+  .bird .wing-l{animation-delay:0s;}
+  @keyframes flap{0%,100%{transform:scaleY(1);}50%{transform:scaleY(0.35);}}
+
+  .bird-1{top:14%;left:-10%;animation:fly1 16s linear infinite;}
+  .bird-2{top:9%;left:-10%;width:24px;animation:fly2 21s linear infinite;animation-delay:3s;}
+  .bird-3{top:20%;left:-10%;width:28px;animation:fly3 26s linear infinite;animation-delay:9s;}
+  @keyframes fly1{
+    0%{transform:translate(0,0);}
+    50%{transform:translate(65vw,-18px);}
+    100%{transform:translate(130vw,4px);}
+  }
+  @keyframes fly2{
+    0%{transform:translate(0,6px);}
+    50%{transform:translate(60vw,-24px);}
+    100%{transform:translate(130vw,0);}
+  }
+  @keyframes fly3{
+    0%{transform:translate(0,-6px);}
+    50%{transform:translate(70vw,10px);}
+    100%{transform:translate(130vw,-8px);}
+  }
+
+  header.hero{
+    max-width:520px;
+    margin:0 auto;
+    padding:110px 22px 8px;
+    text-align:center;
+    position:relative;
+  }
+  .kicker{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.05rem;
+    color:var(--petal-deep);
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(1.6rem, 6vw, 2.1rem);
+    line-height:1.25;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  .message-card{
+    background:var(--card-bg);
+    border-radius:22px;
+    padding:22px 22px 22px;
+    box-shadow:0 14px 34px rgba(60,40,10,0.16);
+    border:1px solid rgba(122,82,48,0.12);
+    position:relative;
+  }
+  .message-card::before{
+    content:"🌻";
+    position:absolute;
+    top:-22px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:2rem;
+    filter:drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+  }
+  .message-text{
+    font-family:'Fraunces',serif;
+    font-size:1.06rem;
+    line-height:1.6;
+    color:var(--ink);
+    margin:10px 0 0;
+    text-align:left;
+  }
+  .signature{
+    margin-top:14px;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:1.02rem;
+    color:var(--ink-soft);
+    text-align:right;
+  }
+  .instruction{
+    margin:16px auto 0;
+    max-width:340px;
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:1rem;
+    color:var(--ink-soft);
+  }
+
+  .garden-intro{
+    max-width:520px;
+    margin:0 auto;
+    padding:6px 26px 4px;
+    text-align:center;
+  }
+  .progress{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+    padding:6px 14px;
+    background:rgba(255,255,255,0.7);
+    border-radius:999px;
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .progress .dot{width:8px;height:8px;border-radius:50%;background:var(--petal-deep);}
+
+  .garden{
+    max-width:520px;
+    margin:20px auto 0;
+    padding:0 10px 4px;
+  }
+  .grass-strip{
+    height:16px;
+    background:repeating-linear-gradient(90deg, var(--leaf) 0 6px, var(--leaf-dark) 6px 8px);
+    clip-path:polygon(0% 100%, 2% 25%, 5% 100%, 8% 35%, 11% 100%, 14% 15%, 17% 100%, 20% 30%, 23% 100%, 26% 20%, 29% 100%, 32% 40%, 35% 100%, 38% 10%, 41% 100%, 44% 25%, 47% 100%, 50% 35%, 53% 100%, 56% 15%, 59% 100%, 62% 30%, 65% 100%, 68% 20%, 71% 100%, 74% 40%, 77% 100%, 80% 10%, 83% 100%, 86% 25%, 89% 100%, 92% 35%, 95% 100%, 98% 20%, 100% 100%);
+  }
+  .plot-field{
+    background:linear-gradient(180deg, var(--soil-1) 0%, var(--soil-2) 100%);
+    border-radius:0 0 16px 16px;
+    padding:16px 6px 18px;
+    display:grid;
+    grid-template-columns:repeat(10, 1fr);
+    gap:10px 2px;
+  }
+  .flower-btn{
+    appearance:none;border:none;background:none;padding:6px 0;margin:0;
+    width:100%;min-height:48px;
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  .flower-btn:focus-visible{outline:2px solid #fff3c2;outline-offset:2px;border-radius:8px;}
+  .flower-svg{width:26px;height:40px;overflow:visible;}
+  @media (min-width:400px){.flower-svg{width:30px;height:46px;}}
+  .stem{stroke:var(--leaf-dark);stroke-width:2.4;fill:none;}
+  .leaf-shape{fill:var(--leaf);}
+  .bud{transition:transform .25s ease;transform-origin:center;}
+  .bloom-group{
+    opacity:0;transform:scale(0.2);transform-origin:16px 12px;
+    transition:opacity .45s cubic-bezier(.2,1.4,.4,1), transform .45s cubic-bezier(.2,1.4,.4,1);
+  }
+  .petal{fill:var(--petal-1);}
+  .petal.alt{fill:var(--petal-2);}
+  .flower-center{fill:#8a5a1f;}
+  .flower-btn.opened .bud{transform:scale(0);opacity:0;}
+  .flower-btn.opened .bloom-group{opacity:1;transform:scale(1);}
+  .flower-btn:not(.opened) .flower-svg{animation:sway 4s ease-in-out infinite;}
+  .flower-btn:nth-child(3n) .flower-svg{animation-delay:-1.3s;}
+  .flower-btn:nth-child(4n) .flower-svg{animation-delay:-2.6s;}
+  @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+  .flower-btn.opened .flower-svg{animation:none;}
+
+  footer{
+    text-align:center;
+    padding:22px 20px calc(30px + env(safe-area-inset-bottom,0px));
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+
+  .overlay{
+    position:fixed;inset:0;background:rgba(58,42,18,0.55);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;padding-top:calc(20px + env(safe-area-inset-top,0px));
+    padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));
+    opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:50;
+  }
+  .overlay.show{opacity:1;pointer-events:auto;}
+  .overlay-card{
+    background:var(--card-bg);border-radius:24px;max-width:360px;width:100%;
+    padding:28px 24px 24px;text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    transform:translateY(16px) scale(0.96);
+    transition:transform .3s cubic-bezier(.2,1.2,.4,1);
+  }
+  .overlay.show .overlay-card{transform:translateY(0) scale(1);}
+  .overlay-flower{width:84px;height:84px;margin:0 auto 14px;}
+  .overlay-text{font-family:'Fraunces',serif;font-size:1.12rem;line-height:1.5;color:var(--ink);margin:0 0 20px;}
+  .close-btn{
+    appearance:none;border:none;background:var(--petal-2);color:#4a2e00;
+    font-family:'Karla',sans-serif;font-weight:700;font-size:0.95rem;
+    padding:11px 26px;border-radius:999px;cursor:pointer;transition:transform .15s ease;
+  }
+  .close-btn:active{transform:scale(0.96);}
+  .final-overlay .overlay-card{max-width:380px;}
+  .final-overlay .overlay-text{font-size:1.15rem;}
+
+  @media (prefers-reduced-motion: reduce){
+    .bird, .sun-rays, .flower-btn .flower-svg, .sun-core{animation:none !important;}
+    *{transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+  <div class="sky">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+
+  <div class="sun">
+    <div class="sun-rays">
+      <span style="transform:rotate(0deg);"></span>
+      <span style="transform:rotate(30deg);"></span>
+      <span style="transform:rotate(60deg);"></span>
+      <span style="transform:rotate(90deg);"></span>
+      <span style="transform:rotate(120deg);"></span>
+      <span style="transform:rotate(150deg);"></span>
+    </div>
+    <div class="sun-core"></div>
+  </div>
+
+  <div class="bird bird-1">
+    <svg viewBox="0 0 60 30"><path class="wing wing-l" d="M30 15 Q15 -2 0 13 Q15 22 30 15 Z" fill="#4a4a4a"/><path class="wing wing-r" d="M30 15 Q45 -2 60 13 Q45 22 30 15 Z" fill="#4a4a4a"/></svg>
+  </div>
+  <div class="bird bird-2">
+    <svg viewBox="0 0 60 30"><path class="wing wing-l" d="M30 15 Q15 -2 0 13 Q15 22 30 15 Z" fill="#5c5c5c"/><path class="wing wing-r" d="M30 15 Q45 -2 60 13 Q45 22 30 15 Z" fill="#5c5c5c"/></svg>
+  </div>
+  <div class="bird bird-3">
+    <svg viewBox="0 0 60 30"><path class="wing wing-l" d="M30 15 Q15 -2 0 13 Q15 22 30 15 Z" fill="#3a3a3a"/><path class="wing wing-r" d="M30 15 Q45 -2 60 13 Q45 22 30 15 Z" fill="#3a3a3a"/></svg>
+  </div>
+
+  <header class="hero">
+    <p class="kicker">Para ti</p>
+    <h1>Un jardín de flores amarillas</h1>
+    <div class="message-card">
+      <p class="message-text">No he tenido el gusto aún de conocerte en persona, pero sé que eres una gran chava. Sé que tal vez no es el detalle que esperabas en este día, pero le pongo cariño a esto que te hago, mi pelona.</p>
+      <p class="signature">-De su amigo pesca</p>
+    </div>
+    <p class="instruction">toque la pantalla para que crezca la flor mi enana</p>
+  </header>
+
+  <section class="garden-intro">
+    <div class="progress"><span class="dot"></span><span id="progressText">0 / 20 flores</span></div>
+  </section>
+
+  <section class="garden">
+    <div class="grass-strip"></div>
+    <div class="plot-field" id="plotField"></div>
+  </section>
+
+  <footer>hecho con cariño 🌼</footer>
+
+  <div class="overlay" id="flowerOverlay">
+    <div class="overlay-card">
+      <svg class="overlay-flower" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="9" fill="#8a5a1f"/>
+        <g id="overlayPetals"></g>
+      </svg>
+      <p class="overlay-text" id="overlayText"></p>
+      <button class="close-btn" id="closeOverlay">Cerrar</button>
+    </div>
+  </div>
+
+  <div class="overlay final-overlay" id="finalOverlay">
+    <div class="overlay-card">
+      <p style="font-size:2.2rem;margin:0 0 8px;">🌻🌼🌻</p>
+      <p class="overlay-text">Ese era todo el jardín. Cada flor tenía un pedacito de cariño para ti. Ahora vuelve a florecer, con las frases en otro orden, por si quieres recorrerlo de nuevo.</p>
+      <button class="close-btn" id="closeFinal">Ver el jardín de nuevo</button>
+    </div>
+  </div>
+
+<script>
+const messages = [
+  "Te tengo un gran aprecio mi chama",
+  "Espero el día de conocerte en persona y comer como marranas",
+  "Eres una gran persona, nunca lo olvides",
+  "Que el ogro aquel no vea esto porque me mata",
+  "Sabes que cualquier situación que pases, estaré para ti",
+  "Gracias por siempre escucharme",
+  "Le mando un abrazo mi enana",
+  "Siempre sonríale a la vida mi chama",
+  "Espero que cumpla lo que siempre se proponga",
+  "Eres una gran amiga así como una gran novia",
+  "La valoro mucho en mi vida aunque nunca la he visto en persona",
+  "Me gusta demasiado jugar contigo a lo que sea",
+  "Me ha alegrado los días desde que aquella serpiente me mató",
+  "Hago esto con el corazón mi perra",
+  "Perdóneme si a veces soy medio o muy imbécil",
+  "La quiero mucho mi chama",
+  "Espero que este detallito le guste",
+  "No me vaya a olvidar en su vida",
+  "Tienes el mejor nombre de la vida",
+  "Ya le dije que la quiero?"
+];
+
+const TOTAL = 20;
+const plotField = document.getElementById('plotField');
+const progressText = document.getElementById('progressText');
+const flowerOverlay = document.getElementById('flowerOverlay');
+const overlayText = document.getElementById('overlayText');
+const overlayPetals = document.getElementById('overlayPetals');
+const closeOverlayBtn = document.getElementById('closeOverlay');
+const finalOverlay = document.getElementById('finalOverlay');
+const closeFinalBtn = document.getElementById('closeFinal');
+
+let order = [];
+let openedCount = 0;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function flowerSVG(){
+  return `
+  <svg class="flower-svg" viewBox="0 0 32 48" xmlns="http://www.w3.org/2000/svg">
+    <path class="stem" d="M16 46 C 15 36, 17 28, 16 20"/>
+    <path class="leaf-shape" d="M16 34 C 10 31, 7 35, 6 40 C 12 41, 15 38, 16 34 Z"/>
+    <path class="leaf-shape" d="M16 29 C 22 26, 25 30, 26 35 C 20 36, 17 33, 16 29 Z"/>
+    <g class="bud">
+      <ellipse cx="16" cy="15" rx="5.5" ry="8" fill="var(--leaf)"/>
+      <ellipse cx="16" cy="15" rx="3" ry="6.5" fill="var(--petal-2)"/>
+    </g>
+    <g class="bloom-group">
+      <g transform="translate(16,13)">
+        <ellipse class="petal" rx="4.4" ry="9" transform="rotate(0) translate(0,-8)"/>
+        <ellipse class="petal alt" rx="4.4" ry="9" transform="rotate(60) translate(0,-8)"/>
+        <ellipse class="petal" rx="4.4" ry="9" transform="rotate(120) translate(0,-8)"/>
+        <ellipse class="petal alt" rx="4.4" ry="9" transform="rotate(180) translate(0,-8)"/>
+        <ellipse class="petal" rx="4.4" ry="9" transform="rotate(240) translate(0,-8)"/>
+        <ellipse class="petal alt" rx="4.4" ry="9" transform="rotate(300) translate(0,-8)"/>
+        <circle class="flower-center" r="4.4"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
+function buildOverlayPetals(){
+  let html = '';
+  for(let i=0;i<6;i++){
+    const cls = i % 2 === 0 ? 'petal' : 'petal alt';
+    html += `<ellipse class="${cls}" rx="10" ry="19" transform="translate(32,32) rotate(${i*60}) translate(0,-18)"/>`;
+  }
+  overlayPetals.innerHTML = html;
+}
+buildOverlayPetals();
+
+function buildGarden(){
+  plotField.innerHTML = '';
+  order = shuffle(messages.map((_, i) => i));
+  openedCount = 0;
+  updateProgress();
+  for(let i=0;i<TOTAL;i++){
+    const btn = document.createElement('button');
+    btn.className = 'flower-btn';
+    btn.setAttribute('aria-label', 'Flor ' + (i+1) + ', toca para verla florecer');
+    btn.dataset.plot = i;
+    btn.innerHTML = flowerSVG();
+    btn.addEventListener('click', () => onFlowerClick(btn, i));
+    plotField.appendChild(btn);
+  }
+}
+
+function updateProgress(){
+  progressText.textContent = openedCount + ' / ' + TOTAL + ' flores';
+}
+
+function onFlowerClick(btn, plotIndex){
+  if(btn.classList.contains('opened')){
+    openOverlayFor(plotIndex);
+    return;
+  }
+  btn.classList.add('opened');
+  openedCount++;
+  updateProgress();
+  setTimeout(() => openOverlayFor(plotIndex), 260);
+}
+
+function openOverlayFor(plotIndex){
+  const msgIndex = order[plotIndex];
+  overlayText.textContent = messages[msgIndex];
+  flowerOverlay.classList.add('show');
+}
+
+function closeOverlay(){
+  flowerOverlay.classList.remove('show');
+  if(openedCount === TOTAL){
+    setTimeout(() => { finalOverlay.classList.add('show'); }, 500);
+  }
+}
+
+closeOverlayBtn.addEventListener('click', closeOverlay);
+flowerOverlay.addEventListener('click', (e) => { if(e.target === flowerOverlay) closeOverlay(); });
+
+closeFinalBtn.addEventListener('click', () => {
+  finalOverlay.classList.remove('show');
+  buildGarden();
+  document.querySelector('.garden').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+buildGarden();
+</script>
+</body>
+</html>
